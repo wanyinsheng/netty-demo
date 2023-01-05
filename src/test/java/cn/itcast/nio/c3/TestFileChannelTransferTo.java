@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+/**
+ * 超过 2g 大小的文件传输
+ */
 public class TestFileChannelTransferTo {
     public static void main(String[] args) {
         try (
@@ -16,6 +19,7 @@ public class TestFileChannelTransferTo {
             // left 变量代表还剩余多少字节
             for (long left = size; left > 0; ) {
                 System.out.println("position:" + (size - left) + " left:" + left);
+                //transferTo的返回值为实际传输的长度
                 left -= from.transferTo((size - left), left, to);
             }
         } catch (IOException e) {

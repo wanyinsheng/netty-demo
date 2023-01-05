@@ -5,6 +5,9 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 遍历文件夹
+ */
 public class TestFilesWalkFileTree {
     public static void main(String[] args) throws IOException {
 //        Files.delete(Paths.get("D:\\Snipaste-1.16.2-x64 - 副本"));
