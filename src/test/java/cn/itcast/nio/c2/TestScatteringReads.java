@@ -7,12 +7,16 @@ import java.nio.channels.FileChannel;
 
 import static cn.itcast.nio.c2.ByteBufferUtil.debugAll;
 
+/**
+ * 分散读取
+ * 数据填充至多个 buffer
+ */
 public class TestScatteringReads {
     public static void main(String[] args) {
-        try (FileChannel channel = new RandomAccessFile("words.txt", "r").getChannel()) {
+        try (FileChannel channel = new RandomAccessFile("src/main/resources/3parts.txt", "r").getChannel()) {
             ByteBuffer b1 = ByteBuffer.allocate(3);
             ByteBuffer b2 = ByteBuffer.allocate(3);
-            ByteBuffer b3 = ByteBuffer.allocate(5);
+            ByteBuffer b3 = ByteBuffer.allocate(6);
             channel.read(new ByteBuffer[]{b1, b2, b3});
             b1.flip();
             b2.flip();

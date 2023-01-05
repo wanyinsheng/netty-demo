@@ -6,6 +6,10 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 收集写
+ * 将多个 buffer 的数据填充至 channel
+ */
 public class TestGatheringWrites {
     public static void main(String[] args) {
         ByteBuffer b1 = StandardCharsets.UTF_8.encode("hello");

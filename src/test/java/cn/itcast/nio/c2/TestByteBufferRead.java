@@ -4,6 +4,9 @@ import java.nio.ByteBuffer;
 
 import static cn.itcast.nio.c2.ByteBufferUtil.debugAll;
 
+/**
+ * ByteBuffer的其他几个方法
+ */
 public class TestByteBufferRead {
 
     public static void main(String[] args) {
