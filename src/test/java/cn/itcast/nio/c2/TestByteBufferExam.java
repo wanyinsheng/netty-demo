@@ -29,7 +29,7 @@ public class TestByteBufferExam {
         for (int i = 0; i < source.limit(); i++) {
             // 找到一条完整消息
             if (source.get(i) == '\n') {
-                int length = i + 1 - source.position();
+                int length = i + 1 - source.position();//source.position()指向的是下一次文件读取位置
                 // 把这条完整消息存入新的 ByteBuffer
                 ByteBuffer target = ByteBuffer.allocate(length);
                 // 从 source 读，向 target 写
@@ -40,5 +40,26 @@ public class TestByteBufferExam {
             }
         }
         source.compact();
+    }
+
+    /**
+     * 另一种写法
+     * @param source
+     */
+    private static void split1(ByteBuffer source) {
+        source.flip();
+        int oldLimit = source.limit();
+        for (int i = 0; i < oldLimit; i++) {
+            if (source.get(i) == '\n') {
+                System.out.println(i);
+                ByteBuffer target = ByteBuffer.allocate(i + 1 - source.position());
+                // 0 ~ limit
+                source.limit(i + 1);  //修改buffer的limit（只允许复制i+1以前的数据）
+                target.put(source); // 从source 读，向 target 写
+                debugAll(target);
+                source.limit(oldLimit);//重置回原来的limit
+            }
+        }
+        source.compact();//将没读完的进行压缩
     }
 }
