@@ -178,6 +178,7 @@ public class ByteBufferUtil {
     }
 
     public static short getUnsignedByte(ByteBuffer buffer, int index) {
+
         return (short) (buffer.get(index) & 0xFF);
     }
 }
