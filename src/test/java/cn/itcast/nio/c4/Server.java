@@ -16,36 +16,40 @@ public class Server {
         // 1. 创建 selector, 管理多个 channel
         Selector selector = Selector.open();
         ServerSocketChannel ssc = ServerSocketChannel.open();
-        ssc.configureBlocking(false);
+        ssc.configureBlocking(false);//设置成非阻塞
         // 2. 建立 selector 和 channel 的联系（注册）
         // SelectionKey 就是将来事件发生后，通过它可以知道事件和哪个channel的事件
         SelectionKey sscKey = ssc.register(selector, 0, null);
         // key 只关注 accept 事件
         sscKey.interestOps(SelectionKey.OP_ACCEPT);
         log.debug("sscKey:{}", sscKey);
-        ssc.bind(new InetSocketAddress(8080));
+        ssc.bind(new InetSocketAddress(8081));
         while (true) {
             // 3. select 方法, 没有事件发生，线程阻塞，有事件，线程才会恢复运行
             // select 在事件未处理时，它不会阻塞, 事件发生后要么处理，要么取消，不能置之不理
             selector.select();
             // 4. 处理事件, selectedKeys 内部包含了所有发生的事件
             Iterator<SelectionKey> iter = selector.selectedKeys().iterator(); // accept, read
+            //不断遍历可用事件，遇到就处理（上边的select接收到了一个事件，但是不知道是哪种类型）
             while (iter.hasNext()) {
                 SelectionKey key = iter.next();
                 // 处理key 时，要从 selectedKeys 集合中删除，否则下次处理就会有问题
                 iter.remove();
                 log.debug("key: {}", key);
                 // 5. 区分事件类型
+                //key.isAcceptable();key.isConnectable();key.isWritable();key.isReadable();  四种事件类型
                 if (key.isAcceptable()) { // 如果是 accept
                     ServerSocketChannel channel = (ServerSocketChannel) key.channel();
                     SocketChannel sc = channel.accept();
                     sc.configureBlocking(false);
 
+                    //scKey
                     SelectionKey scKey = sc.register(selector, 0, null);
                     scKey.interestOps(SelectionKey.OP_READ);
                     log.debug("{}", sc);
                     log.debug("scKey:{}", scKey);
                 } else if (key.isReadable()) { // 如果是 read
+                    //处理完一个key要进行删除，在catch删除
                     try {
                         SocketChannel channel = (SocketChannel) key.channel(); // 拿到触发事件的channel
                         ByteBuffer buffer = ByteBuffer.allocate(4);
