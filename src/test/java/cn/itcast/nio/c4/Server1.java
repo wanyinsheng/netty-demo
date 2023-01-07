@@ -82,10 +82,11 @@ public class Server1 {
                         } else {
                             split(buffer);
                             // 需要扩容
-                            if (buffer.position() == buffer.limit()) {
-                                ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() * 2);
+                            if (buffer.position() == buffer.limit()) {//扩容的条件
+                                ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() * 2);//创建一个新的buffer
                                 buffer.flip();
                                 newBuffer.put(buffer); // 0123456789abcdef3333\n
+                                //将新的buffer绑定到key上
                                 key.attach(newBuffer);
                             }
                         }

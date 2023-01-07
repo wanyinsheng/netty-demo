@@ -33,9 +33,9 @@ public class WriteServer {
                     ByteBuffer buffer = Charset.defaultCharset().encode(sb.toString());
 
                     // 2. 返回值代表实际写入的字节数
-                    int write = sc.write(buffer);
+                    int write = sc.write(buffer);//write不能保证一次将所有的东西写到客户端
                     System.out.println(write);
-
+//这里不要一次发送全部数据，在连接上之后先发一部分，然后剩余的消息作为可写事件，这样就不会成为阻塞的方式了
                     // 3. 判断是否有剩余内容
                     if (buffer.hasRemaining()) {
                         // 4. 关注可写事件   1                     4
@@ -49,7 +49,7 @@ public class WriteServer {
                     SocketChannel sc = (SocketChannel) key.channel();
                     int write = sc.write(buffer);
                     System.out.println(write);
-                    // 6. 清理操作
+                    // 6. 清理操作（每一次写完之后需要做的清理工作）
                     if (!buffer.hasRemaining()) {
                         key.attach(null); // 需要清除buffer
                         key.interestOps(key.interestOps() - SelectionKey.OP_WRITE);//不需关注可写事件
