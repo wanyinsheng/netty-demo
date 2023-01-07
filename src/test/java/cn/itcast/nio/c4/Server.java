@@ -52,7 +52,7 @@ public class Server {
                     //处理完一个key要进行删除，在catch删除
                     try {
                         SocketChannel channel = (SocketChannel) key.channel(); // 拿到触发事件的channel
-                        ByteBuffer buffer = ByteBuffer.allocate(4);
+                        ByteBuffer buffer = ByteBuffer.allocate(4);//一个汉子三字节，发送中文就会导致中文乱码
                         int read = channel.read(buffer); // 如果是正常断开，read 的方法的返回值是 -1
                         if(read == -1) {
                             key.cancel();
