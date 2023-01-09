@@ -23,7 +23,9 @@ public class AioDemo1 {
                             Paths.get("1.txt"), StandardOpenOption.READ);
             ByteBuffer buffer = ByteBuffer.allocate(2);
             log.debug("begin...");
+            //CompletionHandler回调对象
             s.read(buffer, 0, null, new CompletionHandler<Integer, ByteBuffer>() {
+                //两个回调方法
                 @Override
                 public void completed(Integer result, ByteBuffer attachment) {
                     log.debug("read completed...{}", result);
@@ -33,6 +35,7 @@ public class AioDemo1 {
 
                 @Override
                 public void failed(Throwable exc, ByteBuffer attachment) {
+
                     log.debug("read failed...");
                 }
             });
@@ -41,6 +44,7 @@ public class AioDemo1 {
             e.printStackTrace();
         }
         log.debug("do other things...");
+        //阻止主线程结束
         System.in.read();
     }
 }
